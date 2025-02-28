@@ -4,62 +4,63 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use Illuminate\Http\Request;
+// use App\Service\Event\EventService;
+use App\Service\Event\EventServiceImpl;
+
 
 class EventController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected $eventService;
+
+    public function __construct(EventServiceImpl $eventService)
+    {
+        $this->eventService = $eventService;
+    }
+
     public function index()
     {
-        //
+        $events = $this->eventService->getAllEvents();
+        return response()->json($events);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function show($id)
     {
-        //
+        $event = $this->eventService->getEventById($id);
+        return response()->json($event);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'organizers_id' => 'required|exists:organizations,id',
+            'title' => 'required|string|max:100',
+            'type_event' => 'required|string|max:200',
+            'status_event' => 'required|string|max:200',
+            'target_participant' => 'required|integer',
+            'description' => 'required|string',
+        ]);
+
+        $event = $this->eventService->createEvent($data);
+        return response()->json(['message' => 'Event created successfully', 'event' => $event]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Event $event)
+    public function update(Request $request, $id)
     {
-        //
+        $data = $request->validate([
+            'title' => 'sometimes|string|max:100',
+            'type_event' => 'sometimes|string|max:200',
+            'status_event' => 'sometimes|string|max:200',
+            'target_participant' => 'sometimes|integer',
+            'description' => 'sometimes|string',
+        ]);
+
+        $event = $this->eventService->updateEvent($id, $data);
+        return response()->json(['message' => 'Event updated successfully', 'event' => $event]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Event $event)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Event $event)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Event $event)
-    {
-        //
+        $this->eventService->deleteEvent($id);
+        return response()->json(['message' => 'Event deleted successfully']);
     }
 }

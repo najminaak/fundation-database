@@ -10,12 +10,12 @@ class Event extends Model
     use HasFactory;
 
     protected $fillable = [
-        'organizer_id', 'title', 'description','target_participants', 'participant_description', 'status_event', 'type_event'
+        'organizers_id', 'title', 'description','target_participant', 'participant_description', 'status_event', 'type_event'
     ];
 
     public function organizer()
     {
-        return $this->belongsTo(Organizer::class, 'organizer_id', 'id');
+        return $this->belongsTo(Organizer::class, 'organizers_id', 'id');
     }
 
     public function eventPhotos()

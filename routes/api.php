@@ -7,6 +7,7 @@ use App\Http\Controllers\API\Auth\OTPResetController;
 use App\Http\Controllers\API\Entrepreneur\Mitra\MitraController;
 use App\Http\Controllers\API\Organizer\Organization\OrganizationController;
 use App\Http\Controllers\UserDataController;
+use App\Http\Controllers\EventController;
 
 
 Route::middleware(['api'])->group(function () {
@@ -23,4 +24,11 @@ Route::middleware(['api'])->group(function () {
     Route::post('password/send-otp', [OTPResetController::class, 'sendOTP']);
     Route::post('password/verify-otp', [OTPResetController::class, 'verifyOTP']);
     Route::post('password/reset-with-otp', [OTPResetController::class, 'resetPassword']);
+    Route::prefix('events')->group(function () {
+        Route::get('/', [EventController::class, 'index']); // Get all events
+        Route::get('/{id}', [EventController::class, 'show']); // Get event by ID
+        Route::post('/', [EventController::class, 'store']); // Create event
+        Route::put('/{id}', [EventController::class, 'update']); // Update event
+        Route::delete('/{id}', [EventController::class, 'destroy']); // Delete event
+    });
 });
