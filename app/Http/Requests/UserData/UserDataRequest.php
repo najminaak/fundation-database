@@ -24,11 +24,11 @@ class UpdateUserDataRequest extends FormRequest
     public function rules()
     {
         return [
-                'email' => 'required|email|unique:users,email',
-                'password' => 'required|min:5',
-                'full_name' => 'required|string|regex:/^[a-zA-Z ]+$/',
-                'phone' => ['required', 'numeric', 'regex:/^62\d{9,}$/'],
-        ];
+            'user_id' => 'required|exists:users,id', // Harus sesuai dengan id di tabel users
+            'username' => 'required|string|unique:user_datas,username|min:3|max:20|regex:/^[a-zA-Z0-9_.]+$/',
+            'full_name' => 'required|string|regex:/^[a-zA-Z ]+$/',
+            'phone' => ['required', 'numeric', 'regex:/^62\d{9,}$/'],
+        ];        
     }
 
     /**

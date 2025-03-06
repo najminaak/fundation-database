@@ -16,35 +16,35 @@ class UserSeeder extends Seeder
     {
         DB::table('users')->insert([
             [
-                'account_id' => Str::random(18), // Menghasilkan account_id acak
+                'account_id' => generate_account_id(),
                 'email' => 'admin@example.com',
-                'email_verified_at' => now(), // Menandakan email sudah diverifikasi
-                'password' => Hash::make('password'), // Ganti dengan password yang aman
+                'email_verified_at' => now(),
+                'password' => Hash::make('password'),
                 'role' => 'admin',
                 'status' => 'active',
-                'remember_token' => Str::random(10),
+                'remember_token' => \Illuminate\Support\Str::random(10),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'account_id' => Str::random(18),
+                'account_id' => generate_account_id(),
                 'email' => 'organizer@example.com',
                 'email_verified_at' => now(),
                 'password' => Hash::make('password'),
                 'role' => 'organizer',
                 'status' => 'active',
-                'remember_token' => Str::random(10),
+                'remember_token' => \Illuminate\Support\Str::random(10),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'account_id' => Str::random(18),
+                'account_id' => generate_account_id(),
                 'email' => 'mitra@example.com',
                 'email_verified_at' => now(),
                 'password' => Hash::make('password'),
                 'role' => 'entrepreneur',
                 'status' => 'active',
-                'remember_token' => Str::random(10),
+                'remember_token' => \Illuminate\Support\Str::random(10),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
