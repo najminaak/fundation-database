@@ -14,6 +14,8 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        DB::table('user_datas')->delete();
+        DB::table('users')->delete();
         DB::table('users')->insert([
             [
                 'account_id' => generate_account_id(),

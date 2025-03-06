@@ -27,8 +27,8 @@ Route::middleware(['api'])->group(function () {
     Route::prefix('events')->group(function () {
         Route::get('/', [EventController::class, 'index']); // Get all events
         Route::get('/{id}', [EventController::class, 'show']); // Get event by ID
-        Route::post('/', [EventController::class, 'store']); // Create event
-        Route::put('/{id}', [EventController::class, 'update']); // Update event
-        Route::delete('/{id}', [EventController::class, 'destroy']); // Delete event
+        Route::post('/', [EventController::class, 'store']); 
+        Route::put('/{id}', [EventController::class, 'update']); 
+        Route::delete('/{id}', [EventController::class, 'destroy']); 
     });
 });

@@ -7,9 +7,6 @@ use App\Helpers\ResponseFormatter;
 
 class RegisterRequest extends FormRequest{
 
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
@@ -28,5 +25,6 @@ class RegisterRequest extends FormRequest{
                 'full_name' => 'required|string|regex:/^[a-zA-Z ]+$/',
                 'phone' => ['required', 'numeric', 'regex:/^62\d{9,}$/'],
             ];
+            
     }
 }

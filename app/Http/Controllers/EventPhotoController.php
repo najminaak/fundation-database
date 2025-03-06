@@ -7,59 +7,37 @@ use Illuminate\Http\Request;
 
 class EventPhotoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected $service;
+
+    public function __construct(EventPhotoService $service)
+    {
+        $this->service = $service;
+    }
+
     public function index()
     {
-        //
+        return response()->json($this->service->getAll());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function show($id)
     {
-        //
+        return response()->json($this->service->getById($id));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate(['event_id' => 'required|exists:events,id', 'photo_file' => 'required|string']);
+        return response()->json($this->service->create($data));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(EventPhoto $eventPhoto)
+    public function update(Request $request, $id)
     {
-        //
+        $data = $request->validate(['photo_file' => 'sometimes|string']);
+        return response()->json($this->service->update($id, $data));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(EventPhoto $eventPhoto)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, EventPhoto $eventPhoto)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(EventPhoto $eventPhoto)
-    {
-        //
+        return response()->json($this->service->delete($id));
     }
 }
