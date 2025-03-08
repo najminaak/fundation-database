@@ -10,7 +10,7 @@ class EventCategoryName extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'icon'
+        'name', 'icon', 'parent_id'
     ];
 
     public function events()

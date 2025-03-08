@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Service\Category\EventCategoryService;
 use App\Models\EventCategory;
 use Illuminate\Http\Request;
 
@@ -10,56 +11,35 @@ class EventCategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
+    protected $service;
+
+    public function __construct(EventCategoryService $service)
+    {
+        $this->service = $service;
+    }
+
     public function index()
     {
-        //
+        return response()->json($this->service->getAllEventCategories());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function show($id)
     {
-        //
+        return response()->json($this->service->getEventCategoryById($id));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'event_id' => 'required|integer',
+            'event_category_name_id' => 'required|exists:event_category_names,id',
+        ]);
+
+        return response()->json($this->service->createEventCategory($data), 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(EventCategory $eventCategory)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(EventCategory $eventCategory)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, EventCategory $eventCategory)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(EventCategory $eventCategory)
-    {
-        //
+        return response()->json($this->service->deleteEventCategory($id));
     }
 }
