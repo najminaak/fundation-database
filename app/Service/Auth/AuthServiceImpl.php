@@ -37,10 +37,13 @@ class AuthServiceImpl implements AuthService
                 Log::info('User Inactive');
                 throw new Exception('User Inactive', 401); // Ensure integer code
             }
-            $token = $user->createToken($user->email . '_' . now(), [
-                $user->role,
-            ])->accessToken;
-
+            $scope = match ($user->role) {
+                'entrepreneur' => ['entrepreneur'],
+                'organizer' => ['organizer'],
+                'admin' => ['admin'],
+                default => []
+            };
+            $token = $user->createToken('authToken', $scope)->accessToken;
             $data = [
                 'user' => LoginResource::make($user),
                 'token' => $token,
@@ -114,7 +117,7 @@ class AuthServiceImpl implements AuthService
     public function logout(Request $request)
     {
         try {
-            $user = Auth::user()->token();
+            $user = Auth::user()->tokens();
             $user->revoke();
         } catch (\Exception $exception) {
             throw new Exception($exception->getMessage(), (int) $exception->getCode()); // Ensure integer code

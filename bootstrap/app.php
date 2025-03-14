@@ -4,8 +4,6 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
-// require_once "../app/Helpers/NamingHelpers.php";
-
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
@@ -14,14 +12,19 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // $middleware->alias([
-        //     'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
-        //     'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
-        //     'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
-        // ]);
-    })
-    ->withMiddleware(function (Middleware $middleware) {
-        
+        // Menambahkan middleware grup untuk API
+        $middleware->group('api', [
+            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            \Illuminate\Routing\Middleware\ThrottleRequests::class, // Throttle API request
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        ]);
+
+        // Menambahkan alias middleware
+        $middleware->alias([
+            'auth' => \App\Http\Middleware\Authenticate::class,
+            'scope' => \App\Http\Middleware\CheckScope::class,
+            'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class, // Pastikan ada alias throttle
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         
