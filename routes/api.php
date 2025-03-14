@@ -15,7 +15,7 @@ use App\Http\Controllers\EventCategoryController;
 
 
 Route::middleware(['api'])->group(function () {
-    Route::post('login', [LoginController::class, 'login']);
+    Route::post('login', [LoginController::class, 'login'])->name('login');
     Route::post('logout', [LoginController::class, 'logout'])->middleware('auth:api');
 
     // Endpoint registrasi Organizer
@@ -24,13 +24,12 @@ Route::middleware(['api'])->group(function () {
     // Endpoint registrasi Entrepreneur
     Route::post('/register-entrepreneur', [RegisterController::class, 'entrepreneurRegister'])->name('api.register-entrepreneur');
     Route::post('/mitra-form/{user_id}', [MitraController::class, 'store'])->name('api.mitra-form');
-    Route::put('/user-form/{user_id}', [UserDataController::class,'updateupdateUserData'])->name('api.user-form');
+    Route::put('/user-form/{user_id}', [UserDataController::class,'updateUserData'])->name('api.user-form');
     Route::post('password/send-otp', [OTPResetController::class, 'sendOTP']);
     Route::post('password/verify-otp', [OTPResetController::class, 'verifyOTP']);
     Route::post('password/reset-with-otp', [OTPResetController::class, 'resetPassword']);
 
     Route::middleware(['auth:api', 'scope:entrepreneur'])->group(function () {
-
         Route::prefix('events')->group(function () {
             Route::get('/', [EventController::class, 'index']);
             Route::get('/{id}', [EventController::class, 'show']);

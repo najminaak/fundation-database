@@ -117,10 +117,12 @@ class AuthServiceImpl implements AuthService
     public function logout(Request $request)
     {
         try {
-            $user = Auth::user()->tokens();
-            $user->revoke();
+            $request->user()->token()->revoke();
+            return response()->json(['message' => 'Successfully logged out']);
         } catch (\Exception $exception) {
-            throw new Exception($exception->getMessage(), (int) $exception->getCode()); // Ensure integer code
+            throw new Exception($exception->getMessage(), (int) $exception->getCode());
         }
     }
+    
+    
 }
