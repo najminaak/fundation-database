@@ -34,46 +34,52 @@ class MitraServiceImpl implements MitraService
     public function postmitraEnrollment(MitraEnrollmentRequest $request, $user_id)
     {
         $validatedData = $request->validated();
+        
         try {
-            
-            $file = $request->photo_file;
-            $filenameWithExt = $file->getClientOriginalName();
-            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-            $extension = $file->getClientOriginalExtension();
-            $filenameOriginal = 'entrepreneur/mitra/' . $filename . '_' . time() . '.' . $extension;
-            $path = $file->storeAs('public/' . $filenameOriginal);
-            $validatedData['photo_file'] = 'storage/'.$filenameOriginal;
+            if ($request->hasFile('photo_file')) { 
+                $file = $request->file('photo_file'); // Gunakan file() untuk keamanan
+                $filenameWithExt = $file->getClientOriginalName();
+                $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+                $extension = $file->getClientOriginalExtension();
+                $filenameOriginal = 'entrepreneur/mitra/' . $filename . '_' . time() . '.' . $extension;
+                $path = $file->storeAs('public/' . $filenameOriginal);
+                $validatedData['photo_file'] = 'storage/'.$filenameOriginal;
+            } else {
+                // Jika tidak ada file yang diunggah, tetap lanjutkan tanpa mengisi photo_file
+                $validatedData['photo_file'] = null;
+            }
+    
             $mitra = $this->mitraRepository->save($validatedData);
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             dd($exception->getMessage());
             throw new Exception(__('validation.message.something_went_wrong'), 500);
-        }catch (AuthorizationException $exception) {
+        } catch (AuthorizationException $exception) {
             throw new Exception('You are not authorized to access', 403);
         }
-
+    
         try {
             $datamitra = [
                 'user_id' => $user_id,
                 'mitra_id' => $mitra->id
             ];
             $relation = Entrepreneur::create($datamitra);
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             dd($exception->getMessage());
             throw new Exception(__('validation.message.something_went_wrong'), 500);
-        }catch (AuthorizationException $exception) {
+        } catch (AuthorizationException $exception) {
             throw new Exception('You are not authorized to access', 403);
-        }catch (ModelNotFoundException $exception) {
+        } catch (ModelNotFoundException $exception) {
             throw new Exception('Model not found', 404);
         }
-
+    
         $data = [
             'mitra' => $mitra,
             'entrepreneur' => $relation
         ];
-
+    
         return $data;
-        
     }
+    
 
     public function updatemitra(MitraEnrollmentRequest $request)
     {
