@@ -76,5 +76,14 @@ Route::middleware(['api'])->group(function () {
             Route::put('/{id}', [EventCategoryNameController::class, 'update']);
             Route::delete('/{id}', [EventCategoryNameController::class, 'destroy']);
         });
+        Route::prefix('event-photos')->group(function () {
+            Route::get('/', [EventPhotoController::class, 'index']);
+            Route::get('/{id}', [EventPhotoController::class, 'getById']);
+            Route::post('/', [EventPhotoController::class, 'store']); // Mengubah 'create' menjadi 'store'
+            Route::put('/{id}', [EventPhotoController::class, 'update']);
+            Route::delete('/{id}', [EventPhotoController::class, 'destroy']);
+        });
+           
+        
     });
 });

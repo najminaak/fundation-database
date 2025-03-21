@@ -120,6 +120,7 @@ class AuthServiceImpl implements AuthService
             $request->user()->token()->revoke();
             return response()->json(['message' => 'Successfully logged out']);
         } catch (\Exception $exception) {
+            
             throw new Exception($exception->getMessage(), (int) $exception->getCode());
         }
     }
