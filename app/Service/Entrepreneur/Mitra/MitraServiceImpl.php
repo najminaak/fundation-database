@@ -8,25 +8,25 @@ use App\Repository\Mitra\MitraRepository;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Storage;
 
 class MitraServiceImpl implements MitraService
 {
     protected $mitraRepository;
 
-
     public function __construct(MitraRepository $mitraRepository)
     {
         $this->mitraRepository = $mitraRepository;
     }
-    
+
     public function getmitraLists()
     {
         try {
             $mitraList = $this->mitraRepository->findAll();
             return $mitraList;
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             throw new Exception(__('validation.message.something_went_wrong'), 500);
-        }catch (AuthorizationException $exception) {
+        } catch (AuthorizationException $exception) {
             throw new Exception('You are not authorized to access', 403);
         }
     }
@@ -34,21 +34,28 @@ class MitraServiceImpl implements MitraService
     public function postmitraEnrollment(MitraEnrollmentRequest $request, $user_id)
     {
         $validatedData = $request->validated();
-        
+
         try {
-            if ($request->hasFile('photo_file')) { 
-                $file = $request->file('photo_file'); // Gunakan file() untuk keamanan
-                $filenameWithExt = $file->getClientOriginalName();
-                $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-                $extension = $file->getClientOriginalExtension();
-                $filenameOriginal = 'entrepreneur/mitra/' . $filename . '_' . time() . '.' . $extension;
-                $path = $file->storeAs('public/' . $filenameOriginal);
-                $validatedData['photo_file'] = 'storage/'.$filenameOriginal;
-            } else {
-                // Jika tidak ada file yang diunggah, tetap lanjutkan tanpa mengisi photo_file
-                $validatedData['photo_file'] = null;
+            $base64Image = $request->photo_file;
+
+            // Jika ada prefix seperti data:image/png;base64,...
+            if (str_contains($base64Image, 'base64,')) {
+                $base64Image = explode('base64,', $base64Image)[1];
             }
-    
+
+            // Decode
+            $imageData = base64_decode($base64Image);
+
+            // Nama file unik
+            $filename = 'entrepreneur/mitra/' . uniqid() . '.jpg';
+
+            // Simpan ke storage/public
+            Storage::disk('public')->put($filename, $imageData);
+
+            // Simpan path-nya
+            $validatedData['photo_file'] = 'storage/' . $filename;
+
+            // Simpan ke database
             $mitra = $this->mitraRepository->save($validatedData);
         } catch (\Exception $exception) {
             dd($exception->getMessage());
@@ -87,18 +94,20 @@ class MitraServiceImpl implements MitraService
             $mitraId = auth()->user()->entrepreneur->mitra_id;
             $validatedData = $request->validated();
             $file = $request->photo_file;
-            if(!$file == null){
+
+            if ($file !== null) {
                 $filenameWithExt = $file->getClientOriginalName();
                 $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
                 $extension = $file->getClientOriginalExtension();
                 $filenameOriginal = 'entrepreneur/mitra/' . $filename . '_' . time() . '.' . $extension;
                 $path = $file->storeAs('public/' . $filenameOriginal);
-                $validatedData['photo_file'] = 'storage/'.$filenameOriginal;
+                $validatedData['photo_file'] = 'storage/' . $filenameOriginal;
             }
+
             $mitra = $this->mitraRepository->update($validatedData, $mitraId);
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             throw new Exception(__('validation.message.something_went_wrong'), 500);
-        }catch (AuthorizationException $exception) {
+        } catch (AuthorizationException $exception) {
             throw new Exception('You are not authorized to access', 403);
         }
 
