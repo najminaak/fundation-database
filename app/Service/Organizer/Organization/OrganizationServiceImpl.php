@@ -8,6 +8,8 @@ use App\Repository\Organization\OrganizationRepository;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Storage;
+
 
 class OrganizationServiceImpl implements OrganizationService
 {
@@ -34,41 +36,56 @@ class OrganizationServiceImpl implements OrganizationService
     public function postOrganizationEnrollment(OrganizationEnrollmentRequest $request, $user_id)
     {
         $validatedData = $request->validated();
-        try {
-            $file = $request->photo_file;
-            $filenameWithExt = $file->getClientOriginalName();
-            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-            $extension = $file->getClientOriginalExtension();
-            $filenameOriginal = 'organizer/organization/' . $filename . '_' . time() . '.' . $extension;
-            $path = $file->storeAs('public/' . $filenameOriginal);
-            $validatedData['photo_file'] = 'storage/'.$filenameOriginal;
-            $organizer = $this->organizationRepository->save($validatedData);
-        }catch (\Exception $exception){
-            throw new Exception(__('validation.message.something_went_wrong'), 500);
-        }catch (AuthorizationException $exception) {
-            throw new Exception('You are not authorized to access', 403);
-        }
 
         try {
-            $dataOrganizer = [
-                'user_id' => $user_id,
-                'organization_id' => $organizer->id
-            ];
-            $relation = Organizer::create($dataOrganizer);
-        }catch (\Exception $exception){
+            $base64Image = $request->photo_file;
+
+            // Jika ada prefix seperti data:image/png;base64,...
+            if (str_contains($base64Image, 'base64,')) {
+                $base64Image = explode('base64,', $base64Image)[1];
+            }
+
+            // Decode
+            $imageData = base64_decode($base64Image);
+
+            // Nama file unik
+            $filename = 'organizer/organization/' . uniqid() . '.jpg';
+
+            // Simpan ke storage/public
+            Storage::disk('public')->put($filename, $imageData);
+
+            // Simpan path-nya
+            $validatedData['photo_file'] = 'storage/' . $filename;
+
+            // Simpan ke database
+            $organization = $this->organizationRepository->save($validatedData);
+        } catch (\Exception $exception) {
             dd($exception->getMessage());
             throw new Exception(__('validation.message.something_went_wrong'), 500);
-        }catch (AuthorizationException $exception) {
+        } catch (AuthorizationException $exception) {
             throw new Exception('You are not authorized to access', 403);
-        }catch (ModelNotFoundException $exception) {
+        }
+    
+        try {
+            $dataorganization = [
+                'user_id' => $user_id,
+                'organization_id' => $organization->id
+            ];
+            $relation = Organizer::create($dataorganization);
+        } catch (\Exception $exception) {
+            dd($exception->getMessage());
+            throw new Exception(__('validation.message.something_went_wrong'), 500);
+        } catch (AuthorizationException $exception) {
+            throw new Exception('You are not authorized to access', 403);
+        } catch (ModelNotFoundException $exception) {
             throw new Exception('Model not found', 404);
         }
-
+    
         $data = [
-            'organization' => $organizer,
+            'organization' => $organization,
             'organizer' => $relation
         ];
-
+    
         return $data;
     }
 
@@ -76,10 +93,10 @@ class OrganizationServiceImpl implements OrganizationService
     {
         
         try {
-            $validatedData = $request->validated();
             $organizationId = auth()->user()->organizer->organization_id;
+            $validatedData = $request->validated();
             $file = $request->photo_file;
-            if(!$file == null){
+            if($file !== null){
                 $filenameWithExt = $file->getClientOriginalName();
                 $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
                 $extension = $file->getClientOriginalExtension();
@@ -96,6 +113,6 @@ class OrganizationServiceImpl implements OrganizationService
             throw new Exception('Model not found', 404);
         }
 
-        return $organizer;
+        return $organization;
     }
 }
