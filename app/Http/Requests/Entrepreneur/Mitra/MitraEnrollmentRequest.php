@@ -29,7 +29,7 @@ class MitraEnrollmentRequest extends FormRequest
             'address' => ['required', 'string'],
             'city' => ['required', 'string'],
             'province' => ['required', 'string'],
-            'photo_file' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
+            'photo_file' => ['required', 'string'],
         ];
     }
 }
