@@ -3,7 +3,7 @@
 namespace App\Service\UserData;
 
 use App\Models\UserData;
-use App\Repository\User\UserData\UserDataRepository;
+use App\Repository\UserData\UserDataRepository;
 use Exception;
 
 class UserDataServiceImpl implements UserDataService
@@ -18,10 +18,22 @@ class UserDataServiceImpl implements UserDataService
     public function updateUserData(array $data, $userId)
     {
         try {
+            // Melakukan update data
             $updatedData = $this->userDataRepository->fillUpdateById($data, $userId);
             return $updatedData;
         } catch (\Exception $e) {
-            throw new Exception(__('validation.message.something_went_wrong'), 500);
+            // Log error secara lebih detail
+            \Log::error('Error updating user data for user ID: ' . $userId, [
+                'exception_message' => $e->getMessage(),
+                'stack_trace' => $e->getTraceAsString(),
+                'data' => $data, // Cek data yang dikirimkan
+            ]);
+            
+
         }
+    }
+    public function getUserDataById($userId)
+    {
+        return $this->userDataRepository->findById($userId);
     }
 }

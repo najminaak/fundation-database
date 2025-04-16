@@ -4,11 +4,13 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use App\Repository\User\UserRepository;
-use App\Repository\User\UserRepositoryImple;
+use App\Repository\User\UserRepositoryImpl;
 use App\Repository\UserData\UserDataRepository;
 use App\Repository\UserData\UserDataRepositoryImpl;
 use App\Repository\Event\EventRepository;
 use App\Repository\Event\EventRepositoryImpl;
+use App\Service\UserData\UserDataService;
+use App\Service\UserData\UserDataServiceImpl;
 use Laravel\Passport\Passport;
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,6 +22,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(UserDataRepositoryInterface::class, UserDataRepository::class);
         $this->app->bind(EventRepositoryInterface::class, EventRepository::class);
+        $this->app->bind(UserDataRepositoryInterface::class,UserDataImpl::class);
+        $this->app->bind(UserDataService::class,UserDataServiceImpl::class);    // Implementasi
+
     }
 
     /**

@@ -12,4 +12,6 @@ interface MitraService
 
     public function updateMitra(MitraEnrollmentRequest $request);
 
+    public function getMitraById($user_id);
+
 }

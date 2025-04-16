@@ -8,6 +8,8 @@ use App\Http\Resources\Entrepreneur\Mitra\MitraResource;
 use Illuminate\Http\Request;
 use App\Service\Entrepreneur\Mitra\MitraService;
 use App\Http\Responses\ApiResponse;
+use App\Models\Entrepreneur;
+use App\Models\Mitra; 
 
 
 class MitraController extends Controller
@@ -46,4 +48,32 @@ class MitraController extends Controller
             return new ApiResponse('error',  $exception->getMessage(), null, $exception->getCode());
         }
     }
+
+    public function show($user_id)
+    {
+        // Ambil entrepreneur berdasarkan user_id
+        $entrepreneur = Entrepreneur::where('user_id', $user_id)->first();
+    
+        if (!$entrepreneur) {
+            return response()->json([
+                'message' => 'Entrepreneur not found',
+            ], 404);
+        }
+    
+        // Ambil mitra berdasarkan entrepreneur_id
+        $mitra = Mitra::where('id', $entrepreneur->id)->first();
+    
+        if (!$mitra) {
+            return response()->json([
+                'message' => 'Mitra not found',
+            ], 404);
+        }
+    
+        return response()->json([
+            'message' => 'Mitra data retrieved successfully',
+            'data' => $mitra,
+        ]);
+    }
+    
+
 }

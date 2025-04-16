@@ -26,4 +26,8 @@ class MitraRepositoryImpl implements MitraRepository
         Mitra::where('id', $id)->update($data);
         return $this->findById($id);
     }
+    public function findByUserId($user_id)
+    {
+        return Mitra::where('user_id', $user_id)->first();
+    }
 }

@@ -6,5 +6,7 @@ interface UserDataRepository
 {
     public function save($data);
 
-    public function fillUpdateById($data, $userId);  // Pastikan menerima parameter $userId
+    public function fillUpdateById(array $data, $userId);  // Pastikan menerima parameter $userId
+    
+    public function findById($userId); // Tambahkan ini untuk ambil data
 }

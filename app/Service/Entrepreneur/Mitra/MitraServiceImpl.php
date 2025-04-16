@@ -113,4 +113,8 @@ class MitraServiceImpl implements MitraService
 
         return $mitra;
     }
+    public function getMitraById($user_id)
+    {
+        return $this->mitraRepository->findByUserId($user_id);
+    }
 }
