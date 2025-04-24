@@ -12,4 +12,6 @@ interface OrganizationService
 
     public function updateOrganizationData(OrganizationEnrollmentRequest $request);
 
+    public function getOrganizationById($user_id);
+
 }

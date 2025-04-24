@@ -34,6 +34,26 @@ class UserDataServiceImpl implements UserDataService
     }
     public function getUserDataById($userId)
     {
-        return $this->userDataRepository->findById($userId);
+        // Mendapatkan data dari repository
+        $userData = $this->userDataRepository->findById($userId);
+    
+        // Memastikan data ditemukan dan melakukan eager loading terhadap relasi 'user'
+        if ($userData) {
+            // Mengakses relasi 'user' untuk mendapatkan data dari tabel users
+            $user = $userData->user; // Mengambil data relasi user (misalnya email)
+            
+            // Mengembalikan data yang lebih lengkap, termasuk email
+            return [
+                'id' => $userData->id,
+                'full_name' => $userData->full_name, // Asumsi ada di tabel user_data
+                'phone' => $userData->phone,         // Asumsi ada di tabel user_data
+                'email' => $user ? $user->email : null, // Mengambil email dari tabel users
+                'created_at' => $userData->created_at,
+                'updated_at' => $userData->updated_at,
+            ];
+        }
+    
+        return null;
     }
+    
 }

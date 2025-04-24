@@ -26,4 +26,8 @@ class OrganizationRepositoryImpl implements OrganizationRepository
         Organization::where('id', $id)->update($data);
         return $this->findById($id);
     }
+    public function findByUserId($user_id)
+    {
+        return Organization::where('user_id', $user_id)->first();
+    }
 }

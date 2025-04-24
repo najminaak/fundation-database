@@ -16,6 +16,7 @@ class LoginResource extends JsonResource
     {
         if ($this->resource !== null) {
             return [
+                'user_id' => $this->id,
                 'account_id' => $this->account_id,
                 'full_name' => $this->userData->full_name,
                 'role' => $this->role,

@@ -32,6 +32,11 @@ Route::middleware(['api'])->group(function () {
         Route::put('/{user_id}', [UserDataController::class, 'updateUserData']);
         Route::get('/{user_id}', [UserDataController::class, 'showUserData']);    });
     Route::middleware('auth:api')->get('/mitra/{user_id}', [MitraController::class, 'show']);
+    Route::middleware('auth:api')->get('/organization/{user_id}', [OrganizationController::class, 'show']);
+    Route::middleware('auth:api')->get('/organizationlist', [OrganizationController::class, 'index']);
+
+
+
 
 
     

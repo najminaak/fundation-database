@@ -115,4 +115,8 @@ class OrganizationServiceImpl implements OrganizationService
 
         return $organization;
     }
+    public function getOrganizationById($user_id)
+    {
+        return $this->OrganizationRepository->findByUserId($user_id);
+    }
 }

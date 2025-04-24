@@ -11,4 +11,6 @@ interface OrganizationRepository
     public function findById($id);
 
     public function update($data, $id);
+
+    public function findByUserId($user_id);
 }

@@ -8,6 +8,8 @@ use App\Http\Resources\Organizer\Organization\OrganizationResource;
 use App\Http\Responses\ApiResponse;
 use App\Service\Organizer\Organization\OrganizationService;
 use Illuminate\Http\Request;
+use App\Models\Organizer;
+use App\Models\Organization; 
 
 class OrganizationController extends Controller
 {
@@ -44,6 +46,31 @@ class OrganizationController extends Controller
         } catch (\Exception $exception) {
             return new ApiResponse('error',  $exception->getMessage(), null, $exception->getCode());
         }
+    }
+    public function show($user_id)
+    {
+        // Ambil entrepreneur berdasarkan user_id
+        $organizer = Organizer::where('user_id', $user_id)->first();
+    
+        if (!$organizer) {
+            return response()->json([
+                'message' => 'Organizer not found',
+            ], 404);
+        }
+    
+        // Ambil mitra berdasarkan entrepreneur_id
+        $organization = Organization::where('id', $organizer->id)->first();
+    
+        if (!$organization) {
+            return response()->json([
+                'message' => 'Organization not found',
+            ], 404);
+        }
+    
+        return response()->json([
+            'message' => 'Organization data retrieved successfully',
+            'data' => $organization,
+        ]);
     }
 
 }
