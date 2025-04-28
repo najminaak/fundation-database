@@ -10,7 +10,7 @@ class Kontraprestasi extends Model
     use HasFactory;
 
     protected $fillable = [
-        'event_id', 'icon_photo_kontraprestasi_id', 'title', 'min_sponsor', 'max_sponsor', 'feedback'
+        'events_id', 'icon_photo_kontraprestasi_id', 'title', 'min_sponsor', 'max_sponsor', 'feedback'
     ];
 
     public function event()

@@ -3,6 +3,8 @@
 namespace App\Repository\Event;
 
 use App\Models\Event;
+use App\Models\EventPhoto;
+
 
 class EventPhotoRepositoryImpl implements EventPhotoRepository{
     public function getAll()

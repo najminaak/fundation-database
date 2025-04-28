@@ -41,7 +41,8 @@ class AuthServiceImpl implements AuthService
                 'entrepreneur' => ['entrepreneur'],
                 'organizer' => ['organizer'],
                 'admin' => ['admin'],
-                default => []
+                'guest' => ['guest'],
+                default => ['guest']
             };
             $token = $user->createToken('authToken', $scope)->accessToken;
             $data = [

@@ -10,11 +10,11 @@ class EventPhoto extends Model
     use HasFactory;
 
     protected $fillable = [
-        'event_id', 'photo_file'
+        'events_id', 'photo_file'
     ];
 
     public function event()
     {
-        return $this->belongsTo(Event::class, 'event_id', 'id');
+        return $this->belongsTo(Event::class, 'events_id', 'id');
     }
 }

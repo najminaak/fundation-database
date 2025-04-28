@@ -20,28 +20,28 @@ class Event extends Model
 
     public function eventPhotos()
     {
-        return $this->hasMany(EventPhoto::class, 'event_id', 'id');
+        return $this->hasMany(EventPhoto::class, 'events_id', 'id');
     }
 
     public function eventCategories(){
-        return $this->hasMany(EventCategory::class, 'event_id', 'id');
+        return $this->hasMany(EventCategory::class, 'events_id', 'id');
     }
 
     public function categories()
     {
-        return $this->belongsToMany(EventCategoryName::class, 'event_categories');
+        return $this->belongsToMany(EventCategoryName::class, 'event_categories','events_id','event_category_names_id');
     }
 
     public function eventFund(){
-        return $this->hasOne(EventFund::class, 'event_id', 'id');
+        return $this->hasOne(EventFund::class, 'events_id', 'id');
     }
 
     public function eventPlacement(){
-        return $this->hasOne(EventPlacement::class, 'event_id', 'id');
+        return $this->hasOne(EventPlacement::class, 'events_id', 'id');
     }
 
-    public function kotraprestasis(){
-        return $this->hasMany(Kontraprestasi::class, 'event_id', 'id');
+    public function kontraprestasis(){
+        return $this->hasMany(Kontraprestasi::class, 'events_id', 'id');
     }
 
     public function sponsors(){
@@ -49,7 +49,7 @@ class Event extends Model
     }
 
     public function participantCategories(){
-        return $this->hasMany(ParticipantCategory::class, 'event_id', 'id');
+        return $this->hasMany(ParticipantCategory::class, 'events_id', 'id');
     }
 
 }

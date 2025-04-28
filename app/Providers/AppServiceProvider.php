@@ -11,6 +11,10 @@ use App\Repository\Event\EventRepository;
 use App\Repository\Event\EventRepositoryImpl;
 use App\Service\UserData\UserDataService;
 use App\Service\UserData\UserDataServiceImpl;
+use App\Service\Event\EventPhotoService;
+use App\Service\Event\EventPhotoServiceImpl;
+use App\Repository\Event\EventPhotoRepository;
+use App\Repository\Event\EventPhotoRepositoryImpl;
 use Laravel\Passport\Passport;
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,7 +28,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(EventRepositoryInterface::class, EventRepository::class);
         $this->app->bind(UserDataRepositoryInterface::class,UserDataImpl::class);
         $this->app->bind(UserDataService::class,UserDataServiceImpl::class);    // Implementasi
-
+        $this->app->bind(EventPhotoService::class, EventPhotoServiceImpl::class);
+        $this->app->bind(EventPhotoRepository::class, EventPhotoRepositoryImpl::class);
     }
 
     /**

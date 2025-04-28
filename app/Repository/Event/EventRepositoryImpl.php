@@ -2,19 +2,31 @@
 
 namespace App\Repository\Event;
 
-use App\Interfaces\EventRepositorye;
+use App\Repository\Event\EventRepository;
 use App\Models\Event;
 
 class EventRepositoryImpl implements EventRepository
 {
+    protected $withRelations = [
+        'organizer',
+        'eventPhotos',
+        'eventCategories',
+        'categories',
+        'eventFund',
+        'eventPlacement',
+        'kontraprestasis',
+        'sponsors',
+        'participantCategories',
+    ];
+
     public function getAllEvents()
     {
-        return Event::all();
+        return Event::with($this->withRelations)->get();
     }
 
     public function getEventById(int $id)
     {
-        return Event::findOrFail($id);
+        return Event::with($this->withRelations)->findOrFail($id);
     }
 
     public function createEvent(array $data)

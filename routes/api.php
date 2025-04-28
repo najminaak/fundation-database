@@ -40,7 +40,7 @@ Route::middleware(['api'])->group(function () {
 
 
     
-    Route::middleware(['auth:api', 'scope:entrepreneur'])->group(function () {
+    Route::middleware(['api'])->group(function () {
         Route::prefix('events')->group(function () {
             Route::get('/', [EventController::class, 'index']);
             Route::get('/{id}', [EventController::class, 'show']);
@@ -48,7 +48,6 @@ Route::middleware(['api'])->group(function () {
             Route::put('/{id}', [EventController::class, 'update']);
             Route::delete('/{id}', [EventController::class, 'destroy']);
         });
-    
         Route::prefix('event-photos')->group(function () {
             Route::get('/', [EventPhotoController::class, 'index']);
             Route::get('/{id}', [EventPhotoController::class, 'getById']);
@@ -56,7 +55,6 @@ Route::middleware(['api'])->group(function () {
             Route::put('/{id}', [EventPhotoController::class, 'update']);
             Route::delete('/{id}', [EventPhotoController::class, 'delete']);
         });
-    
         Route::prefix('event-placements')->group(function () {
             Route::get('/', [EventPlacementController::class, 'index']);
             Route::get('/{id}', [EventPlacementController::class, 'getById']);
@@ -88,11 +86,11 @@ Route::middleware(['api'])->group(function () {
             Route::delete('/{id}', [EventCategoryNameController::class, 'destroy']);
         });
         Route::prefix('event-photos')->group(function () {
-            Route::get('/', [EventPhotoController::class, 'index']);
-            Route::get('/{id}', [EventPhotoController::class, 'getById']);
-            Route::post('/', [EventPhotoController::class, 'store']); // Mengubah 'create' menjadi 'store'
-            Route::put('/{id}', [EventPhotoController::class, 'update']);
-            Route::delete('/{id}', [EventPhotoController::class, 'destroy']);
+            Route::get('/', [EventPhotoController::class, 'index']);       // GET all photos
+            Route::get('/{id}', [EventPhotoController::class, 'show']);    // GET photo by id
+            Route::post('/', [EventPhotoController::class, 'store']);      // POST create photo
+            Route::put('/{id}', [EventPhotoController::class, 'update']);  // PUT update photo
+            Route::delete('/{id}', [EventPhotoController::class, 'destroy']); // DELETE photo
         });
            
         
