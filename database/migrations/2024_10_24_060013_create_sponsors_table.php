@@ -14,7 +14,7 @@ return new class extends Migration
         schema::create('sponsors', function(blueprint $table){
             $table->id();
             $table->unsignedBigInteger('event_id')->index();
-            $table->unsignedBigInteger('enterpreneur_id')->index();
+            $table->unsignedBigInteger('entrepreneur_id')->index();
             $table->integer('amount');
 
             $table->timestamps();

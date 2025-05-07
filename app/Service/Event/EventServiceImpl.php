@@ -37,4 +37,9 @@ class EventServiceImpl implements EventService
     {
         return $this->eventRepository->deleteEvent($id);
     }
+    public function getPopularEvents(int $limit = 10)
+    {
+    return $this->eventRepository->getPopularEvents($limit);
+    }
+
 }

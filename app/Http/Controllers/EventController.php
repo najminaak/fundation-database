@@ -25,9 +25,22 @@ class EventController extends Controller
 
     public function show($id)
     {
+        // Log ID yang diterima untuk debugging
+        \Log::info('Event ID received: ' . $id);
+        
+        // Konversi ke integer sebelum diproses
+        $id = (int) $id;
+        
         $event = $this->eventService->getEventById($id);
+        
+        if (!$event) {
+            // Jika event tidak ditemukan, kembalikan response 404 dengan pesan yang lebih jelas
+            return response()->json(['message' => 'Event not found'], 404);
+        }
+        
         return response()->json($event);
     }
+    
 
     public function store(Request $request)
     {
@@ -63,4 +76,57 @@ class EventController extends Controller
         $this->eventService->deleteEvent($id);
         return response()->json(['message' => 'Event deleted successfully']);
     }
+    public function getByCategory($categoryId)
+    {
+    $events = Event::with([
+        'organizer.organization',
+        'eventPhotos',
+        'categories',
+        'eventFund',
+        'eventPlacement',
+        'kontraprestasis',
+        'sponsors',
+        'participantCategories',
+    
+    ])
+    ->whereHas('categories', function ($query) use ($categoryId) {
+        $query->where('event_category_names.id', $categoryId);
+    })
+    ->get();
+
+    return response()->json($events);
+    }
+    public function getPopularEvents()
+    {
+        \Log::info('Fetching popular events');
+        $events = Event::with([
+            'organizer',
+            'organizer.organization',
+            'eventPhotos',
+            'eventCategories',
+            'categories',
+            'eventFund',
+            'eventPlacement',
+            'kontraprestasis',
+            'sponsors',
+            'participantCategories'
+        ])
+        ->orderBy('click_count', 'desc')
+        ->take(10)
+        ->get();
+    
+        return response()->json($events);
+    }
+    
+    public function incrementClick($id)
+    {
+    $event = Event::findOrFail($id);
+    $event->increment('click_count');
+    return response()->json([
+        'message' => 'Click count updated',
+        'click_count' => $event->click_count
+    ]);
+    }
+
+
 }

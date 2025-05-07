@@ -15,19 +15,19 @@ class SponsorSeeder extends Seeder
         Sponsor::create([
             'event_id' => 1, // Pastikan ID event valid
             'amount' => 3000000, // Jumlah sponsor
-            'enterpreneur_id' => 1, // Pastikan ID entrepreneur valid
+            'entrepreneur_id' => 1, // Pastikan ID entrepreneur valid
         ]);
 
         Sponsor::create([
             'event_id' => 2, // Pastikan ID event valid
             'amount' => 20000, // Jumlah sponsor
-            'enterpreneur_id' => 2, // Pastikan ID entrepreneur valid
+            'entrepreneur_id' => 2, // Pastikan ID entrepreneur valid
         ]);
 
         Sponsor::create([
             'event_id' => 3, // Pastikan ID event valid
             'amount' => 5000, // Jumlah sponsor
-            'enterpreneur_id' => 3, // Pastikan ID entrepreneur valid
+            'entrepreneur_id' => 3, // Pastikan ID entrepreneur valid
         ]);
     }
 }

@@ -9,6 +9,7 @@ class EventRepositoryImpl implements EventRepository
 {
     protected $withRelations = [
         'organizer',
+        'organizer.organization',
         'eventPhotos',
         'eventCategories',
         'categories',
@@ -16,7 +17,7 @@ class EventRepositoryImpl implements EventRepository
         'eventPlacement',
         'kontraprestasis',
         'sponsors',
-        'participantCategories',
+        'participantCategories'
     ];
 
     public function getAllEvents()
@@ -47,4 +48,9 @@ class EventRepositoryImpl implements EventRepository
         $event->delete();
         return true;
     }
+    public function getPopularEvents(int $limit = 10)
+    {
+    return Event::orderByDesc('click_count')->take($limit)->get();
+    }
+
 }
