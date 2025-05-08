@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Enterpreneur;
+use App\Models\Entrepreneur;
 use Illuminate\Http\Request;
 
 class EntrepreneurController extends Controller
@@ -34,7 +34,7 @@ class EntrepreneurController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Enterpreneur $enterpreneur)
+    public function show(Entrepreneur $entrepreneur)
     {
         //
     }
@@ -42,7 +42,7 @@ class EntrepreneurController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Enterpreneur $enterpreneur)
+    public function edit(Entrepreneur $entrepreneur)
     {
         //
     }
@@ -50,7 +50,7 @@ class EntrepreneurController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Enterpreneur $enterpreneur)
+    public function update(Request $request, Entrepreneur $entrepreneur)
     {
         //
     }
@@ -58,7 +58,7 @@ class EntrepreneurController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Enterpreneur $enterpreneur)
+    public function destroy(Entrepreneur $entrepreneur)
     {
         //
     }

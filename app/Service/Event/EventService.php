@@ -12,4 +12,6 @@ interface EventService
     public function updateEvent(int $id, array $data);
 
     public function deleteEvent(int $id);
+
+    public function getPopularEvents(int $limit = 10);
 }
