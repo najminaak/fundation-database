@@ -7,22 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Kontraprestasi extends Model
 {
-    use HasFactory;
+    protected $fillable = ['events_id', 'icon_photo_kontraprestasis_id', 'kontraprestasi_tier_id'];
 
-    protected $fillable = [
-        'events_id', 'icon_photo_kontraprestasi_id', 'title', 'min_sponsor', 'max_sponsor', 'feedback'
-    ];
+    public function tier()
+    {
+        return $this->belongsTo(KontraprestasiTier::class, 'kontraprestasi_tier_id');
+    }
 
     public function event()
     {
-        return $this->belongsTo(Event::class, 'event_id', 'id');
+        return $this->belongsTo(Event::class, 'events_id');
     }
 
     public function iconPhotoKontraprestasi()
     {
-        return $this->belongsTo(IconPhotoKontraprestasi::class, 'icon_photo_kontraprestasi_id', 'id');
+        return $this->belongsTo(IconPhotoKontraprestasi::class, 'icon_photo_kontraprestasis_id');
     }
-
-
-
 }
