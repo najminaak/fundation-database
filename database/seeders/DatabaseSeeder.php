@@ -13,22 +13,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call([
-            KontraprestasiSeeder::class,            
+        $this->call([     
             // UserSeeder::class,
             // UserDataSeeder::class,
             // OrganizationsTableSeeder::class,
             // OrganizersTableSeeder::class,
             // EventsTableSeeder::class,
-            // MitrasTableSeeder::class,
-
-            // // Seeder untuk detail/relasi event
-            EventFundsTableSeeder::class,
+            // MitrasTableSeeder::class,  
+            // EventFundsTableSeeder::class,
             // EventPlacementsTableSeeder::class,
             // EventPhotosTableSeeder::class,
             // EventCategoryNamesTableSeeder::class,
             // EventCategoriesTableSeeder::class,
-            // EntrepreneursTableSeeder::class,  // Seeder untuk tabel entrepreneurs
+            // EntrepreneursTableSeeder::class,  
+            KontraprestasiSeeder::class,     
+
         ]);
     }
     
