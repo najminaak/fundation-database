@@ -2,37 +2,43 @@
 
 namespace App\Repository\Event;
 
-use App\Repository\Event\EventRepository;
 use App\Models\Event;
 
 class EventRepositoryImpl implements EventRepository
 {
-    protected $withRelations = [
-        'organizer',
-        'organizer.organization',
-        'eventPhotos',
-        'eventCategories',
-        'categories',
-        'eventFund',
-        'eventPlacement',
-        'kontraprestasis',
-        'sponsors',
-        'participantCategories'
-    ];
-
     public function getAllEvents()
     {
-        return Event::with($this->withRelations)->get();
+        return Event::with([
+            'organizer.organization',
+            'eventPhotos',
+            'categories',
+            'eventFund',
+            'eventPlacement',
+            'kontraprestasis',
+            'sponsors',
+            'participantCategories'
+        ])->get();
     }
 
     public function getEventById(int $id)
     {
-        return Event::with($this->withRelations)->findOrFail($id);
+        return Event::with([
+            'organizer.organization',
+            'eventPhotos',
+            'categories',
+            'eventFund',
+            'eventPlacement',
+            'kontraprestasis',
+            'sponsors',
+            'participantCategories'
+        ])->findOrFail($id);
     }
 
     public function createEvent(array $data)
     {
-        return Event::create($data);
+        // Dibiarkan kosong karena sudah di-handle oleh EventServiceImpl
+        // Bisa juga lempar Exception agar tidak dipakai langsung
+        throw new \Exception("Use EventServiceImpl for event creation logic.");
     }
 
     public function updateEvent(int $id, array $data)
@@ -48,9 +54,18 @@ class EventRepositoryImpl implements EventRepository
         $event->delete();
         return true;
     }
+
     public function getPopularEvents(int $limit = 10)
     {
-    return Event::orderByDesc('click_count')->take($limit)->get();
+        return Event::with([
+            'organizer.organization',
+            'eventPhotos',
+            'categories',
+            'eventFund',
+            'eventPlacement',
+            'kontraprestasis',
+            'sponsors',
+            'participantCategories'
+        ])->orderByDesc('click_count')->take($limit)->get();
     }
-
 }
