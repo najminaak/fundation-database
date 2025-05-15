@@ -9,10 +9,10 @@ class ParticipantCategory extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['event_id', 'name'];
+    protected $fillable = ['events_id', 'participant_name'];
 
     public function event()
     {
-        return $this->belongsTo(Event::class, 'event_id', 'id');
+        return $this->belongsTo(Event::class, 'events_id', 'id');
     }
 }

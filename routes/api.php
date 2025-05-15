@@ -15,24 +15,19 @@ use App\Http\Controllers\EventCategoryController;
 use App\Http\Controllers\EventCategoryNameController;
 
 Route::middleware(['api'])->group(function () {
-    // Auth
-    Route::post('login', [LoginController::class, 'login'])->name('login');
+    Route::post('/login', [LoginController::class, 'login'])->name('login');
     Route::post('logout', [LoginController::class, 'logout'])->middleware('auth:api');
 
-    // Register
     Route::post('/register-organizer', [RegisterController::class, 'organizerRegister'])->name('api.register-organizer');
     Route::post('/register-entrepreneur', [RegisterController::class, 'entrepreneurRegister']);
     
-    // Organization / Mitra Form
     Route::post('/organizer-form/{user_id}', [OrganizationController::class, 'store']);
     Route::post('/mitra-form/{user_id}', [MitraController::class, 'store']);
 
-    // OTP Reset
     Route::post('/password/send-otp', [OTPResetController::class, 'sendOTP']);
     Route::post('/password/verify-otp', [OTPResetController::class, 'verifyOTP']);
     Route::post('/password/reset-with-otp', [OTPResetController::class, 'resetPassword']);
 
-    // User Form
     Route::middleware('auth:api')->prefix('/user-form')->group(function () {
         Route::put('/{user_id}', [UserDataController::class, 'updateUserData']);
         Route::get('/{user_id}', [UserDataController::class, 'showUserData']);
@@ -53,11 +48,12 @@ Route::middleware(['api'])->group(function () {
 
         Route::get('/', [EventController::class, 'index']);
         Route::get('/{id}', [EventController::class, 'show']);
-        Route::post('/', [EventController::class, 'store']);
+    });
+    Route::middleware(['auth:api', 'scope:organizer'])->group(function () {
+        Route::post('/events/', [EventController::class, 'store']);
         Route::put('/{id}', [EventController::class, 'update']);
         Route::delete('/{id}', [EventController::class, 'destroy']);
     });
-
     // Event Photos
     Route::prefix('event-photos')->group(function () {
         Route::get('/', [EventPhotoController::class, 'index']);

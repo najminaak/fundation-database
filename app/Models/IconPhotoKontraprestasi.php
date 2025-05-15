@@ -15,6 +15,6 @@ class IconPhotoKontraprestasi extends Model
 
     public function kontraprestasies()
     {
-        return $this->hasMany(Kontraprestasi::class, 'icon_photo_kontraprestasi_id', 'id');
+        return $this->hasMany(Kontraprestasi::class, 'icon_photo_kontraprestasis_id', 'id');
     }
 }

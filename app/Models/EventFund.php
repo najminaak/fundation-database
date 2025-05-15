@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class EventFund extends Model
 {
     use HasFactory;
-
+    
     protected $fillable = [
-        'event_id', 'target_fund', 'sponsor_deadline'
+        'events_id', 'target_fund', 'sponsor_deadline',
     ];
-
     public function event()
     {
-        return $this->belongsTo(Event::class, 'event_id', 'id');
+        return $this->belongsTo(Event::class, 'events_id', 'id');
     }
+    public $timestamps = false; 
 }

@@ -10,17 +10,17 @@ class Kontraprestasi extends Model
     use HasFactory;
 
     protected $fillable = [
-        'events_id', 'icon_photo_kontraprestasi_id', 'title', 'min_sponsor', 'max_sponsor', 'feedback'
+        'events_id', 'icon_photo_kontraprestasis_id', 'title', 'min_sponsor', 'max_sponsor', 'feedback'
     ];
 
     public function event()
     {
-        return $this->belongsTo(Event::class, 'event_id', 'id');
+        return $this->belongsTo(Event::class, 'events_id', 'id');
     }
 
     public function iconPhotoKontraprestasi()
     {
-        return $this->belongsTo(IconPhotoKontraprestasi::class, 'icon_photo_kontraprestasi_id', 'id');
+        return $this->belongsTo(IconPhotoKontraprestasi::class, 'icon_photo_kontraprestasis_id', 'id');
     }
 
 
